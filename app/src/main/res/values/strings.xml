@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PremiseWeather</string>
+    <string name="locationHint">Enter your location!</string>
 </resources>
