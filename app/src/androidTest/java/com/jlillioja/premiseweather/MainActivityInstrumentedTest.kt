@@ -15,8 +15,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import java.lang.Thread.sleep
 import javax.inject.Inject
 
@@ -78,6 +77,22 @@ class MainActivityInstrumentedTest {
         sleep(100)
 
         onView(withId(R.id.weatherList)).check(matches(withListSize(2)))
+    }
+
+    @Test
+    fun swipingDownOnList_refreshesWeather() {
+        val testAddress = "Seattle"
+
+        onView(withId(R.id.locationEntry)).perform(typeText(testAddress), closeSoftKeyboard())
+        onView(withId(R.id.submitButton)).perform(click())
+
+        sleep(100)
+
+        verify(mockWeatherProvider, times(1)).getWeatherBySearch(testAddress)
+
+        onView(withId(R.id.swipeRefreshLayout)).perform(swipeDown())
+
+        verify(mockWeatherProvider, times(2)).getWeatherBySearch(testAddress)
     }
 
 

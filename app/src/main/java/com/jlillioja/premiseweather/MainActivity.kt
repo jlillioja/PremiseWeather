@@ -17,6 +17,8 @@ open class MainActivity : AppCompatActivity() {
     private lateinit var weatherListAdapter: WeatherListAdapter
     private lateinit var compositeDisposable: CompositeDisposable
 
+    private var currentSearch: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -27,18 +29,29 @@ open class MainActivity : AppCompatActivity() {
         weatherList.adapter = weatherListAdapter
 
         submitButton.setOnClickListener {
-            weatherProvider
-                    .getWeatherBySearch(locationEntry.text.toString())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ weather ->
-                        weatherListAdapter.weather = weather
-                    }, { error ->
-                        log(error.localizedMessage)
-                        toast("Could not find weather for that location.")
-                        weatherListAdapter.weather = listOf()
-                    })
-                    .also { compositeDisposable.add(it) }
+            currentSearch = locationEntry.text.toString()
+            fetchWeather()
         }
+
+        swipeRefreshLayout.setOnRefreshListener {
+            fetchWeather()
+        }
+    }
+
+    private fun fetchWeather() {
+        weatherProvider
+                .getWeatherBySearch(currentSearch)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ weather ->
+                    weatherListAdapter.weather = weather
+                    swipeRefreshLayout.isRefreshing = false
+                }, { error ->
+                    log(error.localizedMessage)
+                    toast("Could not find weather for that location.")
+                    weatherListAdapter.weather = listOf()
+                    swipeRefreshLayout.isRefreshing = false
+                })
+                .also { compositeDisposable.add(it) }
     }
 
     override fun onDestroy() {
