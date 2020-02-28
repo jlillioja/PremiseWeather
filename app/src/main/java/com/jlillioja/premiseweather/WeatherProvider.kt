@@ -1,29 +1,29 @@
 package com.jlillioja.premiseweather
 
 import com.jlillioja.premiseweather.network.MetaWeatherInterface
-import com.jlillioja.premiseweather.network.Weather
+import com.jlillioja.premiseweather.network.WeatherNetworkModel
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
-import java.lang.Exception
 
 interface WeatherProvider {
-    fun getWeatherBySearch(search: String): Observable<Weather>
+    fun getWeatherBySearch(search: String): Observable<List<Weather>>
 }
 
 class WeatherProviderImpl(var metaWeatherInterface: MetaWeatherInterface): WeatherProvider {
-    override fun getWeatherBySearch(search: String): Observable<Weather> {
+    override fun getWeatherBySearch(search: String): Observable<List<Weather>> {
         return metaWeatherInterface
                 .getLocationBySearch(search)
                 .flatMap { locations ->
                     val closestLocation = locations.firstOrNull()
                     if (closestLocation == null) {
-                        Observable.error<Weather>(NoLocationsFound())
+                        Observable.error<WeatherNetworkModel>(NoLocationsFound())
                     } else {
                         metaWeatherInterface.getWeatherByWhereOnEarthId(closestLocation.woeid)
                     }
                 }
+                .map { it.toWeatherList() }
                 .subscribeOn(Schedulers.io())
     }
 }
 
-class NoLocationsFound : Exception()
+class NoLocationsFound : Exception("No locations found")

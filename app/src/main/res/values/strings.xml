@@ -2,4 +2,9 @@
     <string name="app_name">PremiseWeather</string>
     <string name="locationHint">Enter your location!</string>
     <string name="submit">Go!</string>
+    <string name="temperatureHeader">°F</string>
+    <string name="pressureHeader">mbar</string>
+    <string name="humidityHeader">Humidity</string>
+    <string name="conditionsHeader">Conditions</string>
+    <string name="likelihoodHeader">Likelihood</string>
 </resources>

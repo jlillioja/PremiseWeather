@@ -2,9 +2,8 @@ package com.jlillioja.premiseweather
 
 import com.jlillioja.premiseweather.network.MetaWeatherInterface
 import io.reactivex.Observable
-import org.junit.Test
-
 import org.junit.Before
+import org.junit.Test
 import org.mockito.Mockito.*
 import java.lang.Thread.sleep
 
@@ -18,7 +17,7 @@ class WeatherProviderTest {
         `when`(mockMetaWeatherInterface.getLocationBySearch(testLocation1.title))
                 .thenReturn(Observable.just(listOf(testLocation1, testLocation2)))
         `when`(mockMetaWeatherInterface.getWeatherByWhereOnEarthId(testLocation1.woeid))
-                .thenReturn(Observable.just(seattleWeather))
+                .thenReturn(Observable.just(seattleWeatherNetworkModel))
         weatherProvider = WeatherProviderImpl(mockMetaWeatherInterface)
     }
 

@@ -21,6 +21,6 @@ interface MetaWeatherInterface {
     @GET("api/location/{woeid}")
     fun getWeatherByWhereOnEarthId(
             @Path("woeid") woeid: Int
-    ): Observable<Weather>
+    ): Observable<WeatherNetworkModel>
 
 }
