@@ -11,6 +11,7 @@ Presently, it shares the limitations of the MetaWeather API:
   - Dagger 2 for dependency injection
   - Espresso for instrumentation testing
   - Mockito for unit testing
+  
 While it is admittedly a bit overengineered for such a small application, my intent in including all these technologies was to demonstrate how they can work together.
 The Retrofit/RxJava stack allows reactive and readable network code - notice, in `WeatherProvider`, how two network calls are required to use the API, but can be chained using `flatmap` without nested callbacks.
 Dagger allows alternate components to be provided to application elements during testing, so that any injected dependency can be mocked. You can see a mock `WeatherProvider` used in `MainActivityInstrumentedTest`.
