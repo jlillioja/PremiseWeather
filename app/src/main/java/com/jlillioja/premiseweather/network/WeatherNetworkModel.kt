@@ -1,26 +1,37 @@
 package com.jlillioja.premiseweather.network
 
-import com.jlillioja.premiseweather.Weather
+import com.google.android.gms.maps.model.LatLng
+import com.jlillioja.premiseweather.WeatherForDay
+import com.jlillioja.premiseweather.WeatherList
 
 data class WeatherNetworkModel(
         val consolidated_weather: List<ConsolidatedWeather>,
-        val title: String
+        val title: String,
+        val latt_long: String
 ) {
-    fun toWeatherList(): List<Weather> {
-        return consolidated_weather.map {
-            Weather(
-                    title,
-                    it.applicable_date,
-                    convertCentrigradeToFahrenheit(it.the_temp),
-                    it.air_pressure,
-                    it.humidity,
-                    it.weather_state_name,
-                    it.predictability
-            )
-        }
+    fun toWeatherList(): WeatherList {
+        return WeatherList(
+                locationTitle = title,
+                location = parseLatLong(latt_long),
+                forecast = consolidated_weather.map {
+                    WeatherForDay(
+                            title,
+                            it.applicable_date,
+                            convertCentrigradeToFahrenheit(it.the_temp),
+                            it.air_pressure,
+                            it.humidity,
+                            it.weather_state_name,
+                            it.predictability
+                    )
+                }
+        )
     }
 
-    private fun convertCentrigradeToFahrenheit(degrees: Double) = ((degrees*(9.0/5.0))+32)
+    private fun convertCentrigradeToFahrenheit(degrees: Double) = ((degrees * (9.0 / 5.0)) + 32)
+    private fun parseLatLong(latt_long: String): LatLng = latt_long
+            .split(',')
+            .map { it.toDouble() }
+            .run { LatLng(get(0), get(1)) }
 }
 
 data class ConsolidatedWeather(

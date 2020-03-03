@@ -1,6 +1,14 @@
 package com.jlillioja.premiseweather
 
-data class Weather(
+import com.google.android.gms.maps.model.LatLng
+
+data class WeatherList(
+        val locationTitle: String,
+        val location: LatLng,
+        val forecast: List<WeatherForDay>
+)
+
+data class WeatherForDay(
         val location: String,
         val day: String,
         val temperature: Double,

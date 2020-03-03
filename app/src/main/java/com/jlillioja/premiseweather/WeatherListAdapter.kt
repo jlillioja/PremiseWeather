@@ -7,21 +7,21 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import kotlin.math.roundToInt
 
-class WeatherListAdapter(private val activity: Activity) : ArrayAdapter<Weather>(activity, R.layout.weather_list_item) {
-    var weather: List<Weather>? = null
+class WeatherListAdapter(private val activity: Activity) : ArrayAdapter<WeatherList>(activity, R.layout.weather_list_item) {
+    var weather: WeatherList? = null
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
     override fun getCount(): Int {
-        return weather?.size ?: 0
+        return weather?.forecast?.size ?: 0
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         return (convertView ?: activity.layoutInflater.inflate(R.layout.weather_list_item, parent, false))
                 .apply {
-                    weather?.get(position)?.let {
+                    weather?.forecast?.get(position)?.let {
                         findViewById<TextView>(R.id.day).text = it.day
                         findViewById<TextView>(R.id.temperature).text = it.temperature.roundToInt().toString()
                         findViewById<TextView>(R.id.pressure).text = it.pressure.roundToInt().toString()

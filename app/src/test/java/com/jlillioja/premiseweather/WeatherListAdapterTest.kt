@@ -30,7 +30,7 @@ class WeatherListAdapterTest {
 
     @Test
     fun getCount_isLengthOfWeatherList() {
-        weatherListAdapter.weather = listOf()
+        weatherListAdapter.weather = null
 
         assertThat(weatherListAdapter.count, equalTo(0))
 
@@ -59,7 +59,7 @@ class WeatherListAdapterTest {
 
         verify(mockLayoutInflater).inflate(R.layout.weather_list_item, null, false)
 
-        verify(mockDayTextView).text = seattleWeather[0].day
+        verify(mockDayTextView).text = seattleWeather.forecast[0].day
         verify(mockTemperatureTextView).text = "47"
         verify(mockPressureTextView).text = "1023"
         verify(mockHumidityTextView).text = "72"

@@ -6,11 +6,11 @@ import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
 interface WeatherProvider {
-    fun getWeatherBySearch(search: String): Observable<List<Weather>>
+    fun getWeatherBySearch(search: String): Observable<WeatherList>
 }
 
 class WeatherProviderImpl(var metaWeatherInterface: MetaWeatherInterface): WeatherProvider {
-    override fun getWeatherBySearch(search: String): Observable<List<Weather>> {
+    override fun getWeatherBySearch(search: String): Observable<WeatherList> {
         return metaWeatherInterface
                 .getLocationBySearch(search)
                 .flatMap { locations ->

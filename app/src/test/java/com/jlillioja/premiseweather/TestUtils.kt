@@ -26,6 +26,7 @@ val seattleWeatherNetworkModel = WeatherNetworkModel(
                 "2020-02-28"
 
         )),
-        "Seattle"
+        "Seattle",
+        "47.6062,122.3321"
 )
 val seattleWeather = seattleWeatherNetworkModel.toWeatherList()

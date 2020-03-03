@@ -53,6 +53,7 @@ dependencies {
     // Dagger
     implementation 'com.google.dagger:dagger:2.15'
     implementation 'com.google.dagger:dagger-android:2.15'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
     kapt 'com.google.dagger:dagger-compiler:2.15'
     kapt 'com.google.dagger:dagger-android-processor:2.15'
     kaptAndroidTest 'com.google.dagger:dagger-compiler:2.15'
