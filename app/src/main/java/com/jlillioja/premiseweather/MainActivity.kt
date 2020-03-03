@@ -1,7 +1,14 @@
 package com.jlillioja.premiseweather
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
@@ -12,6 +19,7 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
+
 open class MainActivity : AppCompatActivity() {
 
     @Inject
@@ -19,8 +27,11 @@ open class MainActivity : AppCompatActivity() {
 
     private lateinit var weatherListAdapter: WeatherListAdapter
     private lateinit var compositeDisposable: CompositeDisposable
-    private lateinit var mapFragment: SupportMapFragment
+
+    private var mapFragment: SupportMapFragment? = null
     private var currentSearch: String = ""
+    private var currentLocation: Location? = null
+    private var searchingByLocation = false
 
     private val mapZoomLevel = 8F
 
@@ -37,7 +48,17 @@ open class MainActivity : AppCompatActivity() {
 
         submitButton.setOnClickListener {
             currentSearch = locationEntry.text.toString()
+            searchingByLocation = false
             fetchWeather()
+        }
+
+        locateButton.setOnClickListener {
+            searchingByLocation = true
+            try {
+                fetchLocation()
+            } catch (e: SecurityException) {
+                Log.e("Exception: %s", e.message)
+            }
         }
 
         swipeRefreshLayout.setOnRefreshListener {
@@ -51,10 +72,46 @@ open class MainActivity : AppCompatActivity() {
         compositeDisposable.dispose()
     }
 
+    private fun fetchLocation() {
+        if (mLocationPermissionGranted) {
+            LocationServices.getFusedLocationProviderClient(this)
+                    .lastLocation
+                    .addOnCompleteListener(this) {
+                        if (it.isSuccessful && it.result != null) {
+                            currentLocation = it.result
+                            setMapLocation(it.result!!.latLong())
+                            fetchWeather()
+                        }
+                    }
+        } else {
+            getLocationPermission()
+        }
+    }
+
+    var mLocationPermissionGranted = false
+    private val requestCode = 1
+    private fun getLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this.applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true
+            fetchLocation()
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), requestCode)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
+        if (grantResults.getOrNull(0) == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true
+            fetchLocation()
+        } else {
+            toast("Location permissions must be granted to use this function.")
+        }
+    }
+
     private fun fetchWeather() {
-        weatherProvider
-                .getWeatherBySearch(currentSearch)
-                .observeOn(AndroidSchedulers.mainThread())
+        swipeRefreshLayout.isRefreshing = true
+        val weatherObservable = if (searchingByLocation && currentLocation != null) weatherProvider.getWeatherByLocation(currentLocation!!) else weatherProvider.getWeatherBySearch(currentSearch)
+        weatherObservable.observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ weather ->
                     weatherListAdapter.weather = weather
                     setMapLocation(weather.location, weather.locationTitle)
@@ -68,11 +125,13 @@ open class MainActivity : AppCompatActivity() {
                 .also { compositeDisposable.add(it) }
     }
 
-    private fun setMapLocation(location: LatLng, locationTitle: String) {
-        mapFragment.getMapAsync { map ->
+    private fun setMapLocation(location: LatLng, locationTitle: String? = null) {
+        mapFragment?.getMapAsync { map ->
             map.clear()
             map.addMarker(MarkerOptions().position(location).title(locationTitle))
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, mapZoomLevel))
         }
     }
+
+    private fun Location.latLong() = LatLng(this.latitude, this.longitude)
 }

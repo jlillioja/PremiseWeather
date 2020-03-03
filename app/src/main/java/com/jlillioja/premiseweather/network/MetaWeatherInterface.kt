@@ -10,13 +10,12 @@ interface MetaWeatherInterface {
     @GET("/api/location/search/")
     fun getLocationBySearch(
             @Query("query") search: String
-    ): Observable<List<Location>>
+    ): Observable<List<LocationInfo>>
 
-    @GET("/api/location/search/?lattlong={latitude},{longitude}")
+    @GET("/api/location/search/")
     fun getLocationByLatLong(
-            @Path("latitude") latitude: Double,
-            @Path("longitude")longitude: Double
-    ): Observable<List<Location>>
+            @Query("lattlong") lattlong: String
+    ): Observable<List<LocationInfo>>
 
     @GET("api/location/{woeid}")
     fun getWeatherByWhereOnEarthId(

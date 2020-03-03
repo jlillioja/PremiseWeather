@@ -1,16 +1,16 @@
 package com.jlillioja.premiseweather
 
 import com.jlillioja.premiseweather.network.ConsolidatedWeather
-import com.jlillioja.premiseweather.network.Location
+import com.jlillioja.premiseweather.network.LocationInfo
 import com.jlillioja.premiseweather.network.WeatherNetworkModel
 
-val testLocation1: Location = Location(
+val testLocation1: LocationInfo = LocationInfo(
         "Seattle",
         "City",
         2490383,
         "47.603561,-122.329437"
 )
-val testLocation2: Location = Location(
+val testLocation2: LocationInfo = LocationInfo(
         "Sydney",
         "City",
         1105779,

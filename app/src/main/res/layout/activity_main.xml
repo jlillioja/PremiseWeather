@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,34 +5,44 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/submitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/submit"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
         android:id="@+id/locationEntry"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:autofillHints=""
         android:hint="@string/locationHint"
         android:inputType="textPostalAddress"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/submitButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintRight_toLeftOf="@id/locateButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/map"/>
 
-    <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        map:layout_constraintTop_toBottomOf="@id/locationEntry"
-        tools:context=".MainActivity" />
+    <ImageButton
+        android:id="@+id/locateButton"
+        android:layout_width="@dimen/buttonWidth"
+        android:layout_height="@dimen/buttonHeight"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/locateButtonContentDescription"
+        android:scaleType="fitCenter"
+        android:src="@drawable/locate"
+        app:layout_constraintBottom_toTopOf="@id/map"
+        app:layout_constraintLeft_toRightOf="@id/locationEntry"
+        app:layout_constraintRight_toLeftOf="@id/submitButton"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="@dimen/buttonWidth"
+        android:layout_height="@dimen/buttonHeight"
+        android:layout_marginRight="8dp"
+        android:text="@string/submit"
+        app:layout_constraintBottom_toTopOf="@id/map"
+        app:layout_constraintLeft_toRightOf="@id/locateButton"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/listHeader"
@@ -118,5 +127,14 @@
             app:layout_constraintTop_toBottomOf="@id/locationEntry" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        map:layout_constraintTop_toBottomOf="@id/locationEntry"
+        tools:context=".MainActivity" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
