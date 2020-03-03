@@ -27,12 +27,80 @@
         app:layout_constraintRight_toLeftOf="@id/submitButton"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/listHeader"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        app:layout_constraintTop_toBottomOf="@id/locationEntry">
+
+        <TextView
+            android:id="@+id/temperatureLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/temperatureHeader"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/pressureLabel"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/pressureLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/pressureHeader"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@id/temperatureLabel"
+            app:layout_constraintRight_toLeftOf="@id/humidityLabel"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/humidityLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/humidityHeader"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@id/pressureLabel"
+            app:layout_constraintRight_toLeftOf="@id/conditionsLabel"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/conditionsLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/conditionsHeader"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@id/humidityLabel"
+            app:layout_constraintRight_toLeftOf="@id/likelihoodLabel"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/likelihoodLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/likelihoodHeader"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@id/conditionsLabel"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/locationEntry">
+        app:layout_constraintTop_toBottomOf="@id/listHeader">
 
         <ListView
             android:id="@+id/weatherList"

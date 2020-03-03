@@ -29,25 +29,18 @@ class WeatherListAdapterTest {
     }
 
     @Test
-    fun getCount_isLengthOfWeatherListPlus1() {
+    fun getCount_isLengthOfWeatherList() {
         weatherListAdapter.weather = listOf()
 
-        assertThat(weatherListAdapter.count, equalTo(1))
+        assertThat(weatherListAdapter.count, equalTo(0))
 
         weatherListAdapter.weather = seattleWeather
 
-        assertThat(weatherListAdapter.count, equalTo(2))
+        assertThat(weatherListAdapter.count, equalTo(1))
     }
 
     @Test
-    fun getView_returnsHeaderRowForFirstPosition_DoesNotAttachToRoot() {
-        weatherListAdapter.getView(0, null, null)
-
-        verify(mockLayoutInflater).inflate(R.layout.weather_list_header, null, false)
-    }
-
-    @Test
-    fun getView_returnsListItemForOtherPositions_CorrectlySetsFields_DoesNotAttachToRoot() {
+    fun getView_returnsListItem_CorrectlySetsFields_DoesNotAttachToRoot() {
         val mockDayTextView = mock(TextView::class.java)
         `when`(mockView.findViewById<TextView>(R.id.day)).thenReturn(mockDayTextView)
         val mockTemperatureTextView = mock(TextView::class.java)
@@ -62,7 +55,7 @@ class WeatherListAdapterTest {
         `when`(mockView.findViewById<TextView>(R.id.likelihood)).thenReturn(mockLikelihoodTextView)
 
         weatherListAdapter.weather = seattleWeather
-        weatherListAdapter.getView(1, null, null)
+        weatherListAdapter.getView(0, null, null)
 
         verify(mockLayoutInflater).inflate(R.layout.weather_list_item, null, false)
 
